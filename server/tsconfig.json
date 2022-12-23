@@ -1,11 +1,26 @@
 {
-   "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "esModuleInterop": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "sourceMap": true
-   }
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "dist",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "baseUrl": ".",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
