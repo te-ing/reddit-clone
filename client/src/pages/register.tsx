@@ -1,4 +1,6 @@
+import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 interface FormValues {
@@ -14,12 +16,29 @@ const register = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm<FormValues>();
 
+  let router = useRouter();
+
+  const handleRegisterSubmit = async ({ email, password, username }: FormValues) => {
+    try {
+      const res = await axios.post('/auth/register', {
+        email,
+        password,
+        username,
+      });
+      console.log('res: ', res);
+    } catch (error: any) {
+      console.log(error);
+      errors.password = error.response.data || {};
+    }
+    router.push('/login');
+  };
+
   return (
     <div className="bg-white">
       <div className="flex flex-col items-center justify-center h-screen p-6">
         <div className="w-10.12 mx-auto md:w-96">
           <h1 className="text-lg font-medium">회원가입</h1>
-          <form onSubmit={handleSubmit((data) => alert(JSON.stringify(data)))}>
+          <form onSubmit={handleSubmit((data) => handleRegisterSubmit(data))}>
             <div>
               <label htmlFor="email" className="text-xs">
                 이메일
