@@ -1,15 +1,15 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+
 interface FormValues {
-  email: string;
   username: string;
   password: string;
 }
 
-const register = () => {
+const login = () => {
   const {
     register,
     handleSubmit,
@@ -19,16 +19,20 @@ const register = () => {
 
   let router = useRouter();
 
-  const handleRegisterSubmit = async ({ email, password, username }: FormValues) => {
+  const handleRegisterSubmit = async ({ password, username }: FormValues) => {
     try {
-      const res = await axios.post('/auth/register', {
-        email,
-        password,
-        username,
-      });
+      const res = await axios.post(
+        '/auth/login',
+        {
+          password,
+          username,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       console.log('res: ', res);
     } catch (error: any) {
-      setError('email', { message: error?.response.data.email });
       setError('password', { message: error?.response.data.password });
       setError('username', { message: error?.response.data.username });
     }
@@ -38,33 +42,8 @@ const register = () => {
     <div className="bg-white">
       <div className="flex flex-col items-center justify-center h-screen p-6">
         <div className="w-10.12 mx-auto md:w-96">
-          <h1 className="text-lg font-medium">회원가입</h1>
+          <h1 className="text-lg font-medium">로그인</h1>
           <form onSubmit={handleSubmit((data) => handleRegisterSubmit(data))}>
-            <div>
-              <label htmlFor="email" className="text-xs">
-                이메일
-              </label>
-              <input
-                id="email"
-                className="w-full p-3 text-xs transition duration-200 border border-gray-400 rounded bg-gray-50 focus:bg-white hover:bg-white"
-                type="text"
-                placeholder="이메일을 입력하세요"
-                aria-invalid={!isDirty ? undefined : errors.email ? 'true' : 'false'}
-                {...register('email', {
-                  required: '이메일은 필수 입력입니다.',
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: '이메일 형식에 맞지 않습니다.',
-                  },
-                })}
-              />
-              {errors.email && (
-                <small role="alert" className="text-red-500 text-xs">
-                  {errors.email.message}
-                </small>
-              )}
-            </div>
-
             <div>
               <label htmlFor="username" className="text-xs ">
                 유저명
@@ -113,13 +92,13 @@ const register = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              회원가입
+              로그인
             </button>
           </form>
           <small>
-            이미 가입하셨나요?
+            등록된 계정이 없으신가요?
             <Link href="/login">
-              <a className="ml-1 text-blue-500 uppercase">로그인</a>
+              <a className="ml-1 text-blue-500 uppercase">회원가입</a>
             </Link>
           </small>
         </div>
@@ -128,4 +107,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default login;

@@ -4,6 +4,13 @@ import Vote from '@/entity/Vote';
 import { validate } from 'class-validator';
 import { Request, Response, Router } from 'express';
 
+const mapError = (errors: Object[]) => {
+  return errors.reduce((prev: any, err: any) => {
+    prev[err.property] = Object.entries(err.constraints[0][1]);
+    return prev;
+  });
+};
+
 const register = async (req: Request, res: Response) => {
   const { email, username, password } = req.body;
 
@@ -31,6 +38,8 @@ const register = async (req: Request, res: Response) => {
     // 엔티티에 정해 놓은 조건으로 user 데이터의 유효성 검사를 해줌.
     errors = await validate(user);
 
+    if (errors.length > 0) return res.status(400).json(mapError);
+
     // 유저 정보를 user table에 저장
     await user.save();
     return res.json(user);
@@ -40,8 +49,10 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
+const login = async (req: Request, res: Response) => {};
+
 const router = Router();
 router.post('/register', register);
-router.get('/register', getRegister);
+router.post('/login', login);
 
 export default router;

@@ -9,7 +9,12 @@ const origin = process.env.ORIGIN;
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(cors());
+app.use(
+  cors({
+    origin,
+    credentials: true,
+  })
+);
 
 app.get('/', (_, res) => res.send('running'));
 app.use('/api/auth', authRoutes);

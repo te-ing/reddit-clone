@@ -7,7 +7,7 @@ import { User } from './User';
 @Entity('subs')
 export default class Sub extends BaseEntity {
   @Index()
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @Column()
