@@ -1,10 +1,10 @@
-import { Expose } from "class-transformer";
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import BaseEntity from "./Entity";
-import Post from "./Post";
-import { User } from "./User";
+import { Expose } from 'class-transformer';
+import { Column, Entity, Index, JoinColumn, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import BaseEntity from './Entity';
+import Post from './Post';
+import { User } from './User';
 
-@Entity("subs")
+@Entity('subs')
 export default class Sub extends BaseEntity {
   @Index()
   @Column({ unique: true })
@@ -26,21 +26,21 @@ export default class Sub extends BaseEntity {
   username: string;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: "username", referencedColumnName: "username" })
+  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;
 
   @OneToMany(() => Post, (post) => post.sub)
-  posts: Post[]
+  posts: Post[];
 
-  @Expose() // JSON이 아닌 클래스로 보낼 수  있음
+  @Expose()
   get imageUrl(): string {
-    return this.imageUrn ? `${process.env.APP_URL}/images/${this.imageUrn}` :
-      "https://www.gravatar.com/avatar?d=mp&f=y"
+    return this.imageUrn
+      ? `${process.env.APP_URL}/images/${this.imageUrn}`
+      : 'https://www.gravatar.com/avatar?d=mp&f=y';
   }
 
-  @Expose() // JSON이 아닌 클래스로 보낼 수  있음
+  @Expose()
   get bannerUrl(): string {
-    return this.bannerUrn ? `${process.env.APP_URL}/images/${this.bannerUrn}` :
-      undefined
+    return this.bannerUrn ? `${process.env.APP_URL}/images/${this.bannerUrn}` : undefined;
   }
 }

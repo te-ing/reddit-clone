@@ -28,9 +28,9 @@ const register = () => {
       console.log('res: ', res);
     } catch (error: any) {
       console.log(error);
-      errors.password = error.response.data || {};
+      errors.password = error?.response?.data || {};
     }
-    router.push('/login');
+    // router.push('/login');
   };
 
   return (
