@@ -1,3 +1,4 @@
+import { useAuthState } from '@/context/auth';
 import axios, { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,30 +17,31 @@ const register = () => {
     formState: { isSubmitting, isDirty, errors },
     setError,
   } = useForm<FormValues>();
+  const { authenticated } = useAuthState();
 
   let router = useRouter();
+  if (authenticated) router.push('/');
 
-  const handleRegisterSubmit = async ({ email, password, username }: FormValues) => {
+  const onSubmit = async ({ email, password, username }: FormValues) => {
     try {
       const res = await axios.post('/auth/register', {
         email,
         password,
         username,
       });
-      console.log('res: ', res);
+      router.push('/login');
     } catch (error: any) {
       setError('email', { message: error?.response.data.email });
       setError('password', { message: error?.response.data.password });
       setError('username', { message: error?.response.data.username });
     }
-    // router.push('/login');
   };
   return (
     <div className="bg-white">
       <div className="flex flex-col items-center justify-center h-screen p-6">
         <div className="w-10.12 mx-auto md:w-96">
           <h1 className="text-lg font-medium">회원가입</h1>
-          <form onSubmit={handleSubmit((data) => handleRegisterSubmit(data))}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor="email" className="text-xs">
                 이메일

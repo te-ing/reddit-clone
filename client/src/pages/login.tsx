@@ -1,3 +1,4 @@
+import { useAuthDispatch, useAuthState } from '@/context/auth';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,8 +17,11 @@ const login = () => {
     formState: { isSubmitting, isDirty, errors },
     setError,
   } = useForm<FormValues>();
-
   let router = useRouter();
+  const { authenticated } = useAuthState();
+  const dispatch = useAuthDispatch();
+
+  if (authenticated) router.push('/');
 
   const handleRegisterSubmit = async ({ password, username }: FormValues) => {
     try {
@@ -31,12 +35,12 @@ const login = () => {
           withCredentials: true,
         }
       );
-      console.log('res: ', res);
+      dispatch('LOGIN', res.data?.user);
+      router.push('/');
     } catch (error: any) {
       setError('password', { message: error?.response.data.password });
       setError('username', { message: error?.response.data.username });
     }
-    // router.push('/login');
   };
   return (
     <div className="bg-white">
