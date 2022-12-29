@@ -17,6 +17,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(cookieParser());
 dotenv.config();
