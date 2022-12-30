@@ -13,7 +13,6 @@ const Home: NextPage = () => {
   };
   const address = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/api/subs/sub/topSubs`;
   const { data: topSubs } = useSWR<Sub[]>(address, fetcher);
-  console.log('topSubs', topSubs);
 
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">

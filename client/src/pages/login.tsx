@@ -38,8 +38,8 @@ const login = () => {
       dispatch('LOGIN', res.data?.user);
       router.push('/');
     } catch (error: any) {
-      setError('password', { message: error?.response.data.password });
-      setError('username', { message: error?.response.data.username });
+      setError('password', { message: error?.response?.data.password });
+      setError('username', { message: error?.response?.data.username });
     }
   };
   return (
