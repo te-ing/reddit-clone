@@ -1,3 +1,4 @@
+import Sidebar from '@/components/SideBar';
 import { useAuthState } from '@/context/auth';
 import axios from 'axios';
 import Image from 'next/image';
@@ -102,7 +103,10 @@ const SubPage = () => {
             </div>
           </div>
           {/* 포스트 및 사이드바 */}
-          <div className="flex max-w-5xl px-4 pt-5 mx-auto"></div>
+          <div className="flex max-w-5xl px-4 pt-5 mx-auto">
+            <div className="w-full md:mr-3 md:w-8/12"></div>
+            <Sidebar sub={sub} />
+          </div>
         </>
       )}
     </>
