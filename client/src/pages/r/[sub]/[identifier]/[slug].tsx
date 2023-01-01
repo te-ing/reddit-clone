@@ -1,11 +1,11 @@
 import { useAuthState } from '@/context/auth';
-import { Post } from '@/types';
+import { Comment, Post } from '@/types';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { FormState, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
 interface FormValues {
@@ -17,11 +17,15 @@ const PostPage = () => {
   const { identifier, sub, slug } = router.query;
   const { authenticated, user } = useAuthState();
   const { data: post, error } = useSWR<Post>(identifier && slug ? `/posts/${identifier}/${slug}` : null);
+  const { data: comments, mutate } = useSWR<Comment[]>(
+    identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
+  );
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isValid },
+    reset,
   } = useForm<FormValues>();
 
   const isNotEmpty = (value: string) => value.trim() !== '';
@@ -30,6 +34,8 @@ const PostPage = () => {
       await axios.post(`/posts/${post?.identifier}/${post?.slug}/comments`, {
         body: newComment,
       });
+      reset({ newComment: '' });
+      mutate();
     } catch (error) {
       console.log(error);
     }
@@ -103,6 +109,24 @@ const PostPage = () => {
                   )}
                 </div>
               </div>
+              {/* 댓글 리스트 부분 */}
+              {comments?.map((comment) => (
+                <div className="flex" key={comment.identifier}>
+                  <div className="py-2 pr-2">
+                    <p className="mb-1 text-xs leading-none">
+                      <Link href={`/u/${comment.username}`}>
+                        <a className="mr-1 font-bold hover:underline">{comment.username}</a>
+                      </Link>
+                      <span className="text-gray-600">
+                        {`${comment.voteScore}
+                        posts
+                        ${dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm')}`}
+                      </span>
+                    </p>
+                    <p>{comment.body}</p>
+                  </div>
+                </div>
+              ))}
             </>
           )}
         </div>

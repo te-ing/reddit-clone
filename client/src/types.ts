@@ -42,7 +42,7 @@ export interface Comment {
   identifier: string;
   body: string;
   username: string;
-  createdAty: string;
+  createdAt: string;
   updatedAt: string;
   post?: Post;
 
